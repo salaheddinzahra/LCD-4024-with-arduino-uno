@@ -1,0 +1,95 @@
+  // this is application of timer (seconds, minuts, hours) with start, stop, and reset function
+  
+  
+  #include <LiquidCrystal440.h>
+  //  LiquidCrystal(rs, rw, enable, en2, d4, d5, d6, d7);  
+  LiquidCrystal LCD(2,9,3,12,4,5,6,7);
+  int day=0;
+  int minute=0;
+  int hour=0;
+  int startstoptimer=13;
+  boolean z=false;
+  int shift;  // visual bar to indecate seconds value from 1 to 60
+  int shift1;  // visual bar to indecate minuts value from 1 to 60
+  int shift2;  // visual bar to indecate hours value from 1 to 24
+  int q=1;
+  int w=0;
+  int second;
+  int msecond;
+  void setup() {
+  LCD.begin(40,4); //Tell Arduino to start your 40 column 4 row LCD
+  LCD.setCursor(0,0);  //Set LCD cursor to upper left corner, column 0, row 0
+  LCD.print(" Timer Is:");  //Print Message on First Row
+
+  }
+  
+  void loop() {
+   
+    for (msecond=w; msecond<100; msecond=msecond+1) {
+      if (digitalRead(startstoptimer)==HIGH){
+     delay(350);
+     z=!z;
+     } 
+     if(z==0){
+     w=msecond ; 
+     goto label;
+     }
+       
+       delay(10);
+      }
+       w=0;
+       second=second+1;
+       LCD.setCursor(0,1); //Go to 1st column(column 0) and 2nd row(row 1)
+       LCD.print(second); 
+       LCD.setCursor(2,1);
+       LCD.print(" Seconds");
+       shift=(second+24)/2.1; 
+       LCD.setCursor(shift,1);
+       LCD.print(">");
+       
+       
+      
+     for(;second>59;){
+       second=0;
+       LCD.setCursor(0,1);
+       LCD.print("0 ");
+       LCD.setCursor(11,1);
+       LCD.print("                                  ");
+       minute=minute+1;
+       LCD.setCursor(0,2); 
+       LCD.print(minute);
+       LCD.setCursor(3,2); //Go to 1st column(column 0) and 2nd row(row 1)
+       LCD.print("minutes");
+       shift1=(minute+24)/2.1; 
+       LCD.setCursor(shift1,2);
+       LCD.print(">");
+     }
+       for(;minute>59;){
+       minute=0;
+       LCD.setCursor(11,2);
+       LCD.print("                             ");
+       hour=hour+1;
+       LCD.setCursor(0,2); 
+       LCD.print("0 ");
+       LCD.setCursor(0,3); 
+       LCD.print(hour);
+       LCD.setCursor(3,3); 
+       LCD.print("hours");
+       
+       }
+      for(;hour>23;){
+       hour=0;
+       day=day+1;
+       LCD.setCursor(0,3); 
+       LCD.print("0 ");
+       LCD.setCursor(15,3); 
+       LCD.print(day);
+       LCD.setCursor(18,3); 
+       LCD.print("days");
+       
+       }
+  label:;
+  
+  
+  
+  }
